@@ -11,19 +11,19 @@ interface NavLink {
 }
 
 const ALL_LINKS: NavLink[] = [
-  { label: 'My Learning', icon: ICONS.learn, persona: Persona.Trainee },
-  { label: 'Search', icon: ICONS.search, persona: Persona.Trainee },
-  { label: 'Dashboard', icon: ICONS.dashboard, persona: Persona.HiringManager },
-  { label: 'Manage Trainees', icon: ICONS.users, persona: Persona.HiringManager },
-  { label: 'Objectives', icon: ICONS.objectives, persona: Persona.HiringManager },
-  { label: 'Content Library', icon: ICONS.content, persona: Persona.Trainer },
-  { label: 'Upload Content', icon: ICONS.upload, persona: Persona.Trainer },
-  { label: 'Compliance Log', icon: ICONS.compliance, persona: Persona.Compliance },
-  { label: 'System Audit', icon: ICONS.search, persona: Persona.Compliance },
-  { label: 'Team Performance', icon: ICONS.reports, persona: Persona.Exec },
-  { label: 'ROI Dashboard', icon: ICONS.dashboard, persona: Persona.Exec },
-  { label: 'System Logs', icon: ICONS.support, persona: Persona.ProductionSupport },
-  { label: 'API Monitor', icon: ICONS.reports, persona: Persona.ProductionSupport },
+  { label: 'My Learning', icon: ICONS.learn, persona: 'Trainee' },
+  { label: 'Search', icon: ICONS.search, persona: 'Trainee' },
+  { label: 'Dashboard', icon: ICONS.dashboard, persona: 'Hiring Manager' },
+  { label: 'Manage Trainees', icon: ICONS.users, persona: 'Hiring Manager' },
+  { label: 'Objectives', icon: ICONS.objectives, persona: 'Hiring Manager' },
+  { label: 'Content Library', icon: ICONS.content, persona: 'Trainer' },
+  { label: 'Upload Content', icon: ICONS.upload, persona: 'Trainer' },
+  { label: 'Compliance Log', icon: ICONS.compliance, persona: 'Compliance' },
+  { label: 'System Audit', icon: ICONS.search, persona: 'Compliance' },
+  { label: 'Team Performance', icon: ICONS.reports, persona: 'Exec' },
+  { label: 'ROI Dashboard', icon: ICONS.dashboard, persona: 'Exec' },
+  { label: 'System Logs', icon: ICONS.support, persona: 'Production Support' },
+  { label: 'API Monitor', icon: ICONS.reports, persona: 'Production Support' },
 ];
 
 const Sidebar: React.FC = () => {
