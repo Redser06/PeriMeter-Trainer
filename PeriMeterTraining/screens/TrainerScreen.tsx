@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext';
 import { TrainingContent, ContentType } from '../types';
 import { ICONS } from '../constants';
 
-const TrainerScreen: React.FC = () => {
+const TrainerScreen: React.FC<{ activeTab?: string }> = ({ activeTab }) => {
   const { user, content, addContent } = useContext(AppContext);
   const [newContent, setNewContent] = useState({
     title: '',
@@ -47,8 +47,8 @@ const TrainerScreen: React.FC = () => {
     <div className="space-y-8">
       <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Trainer Dashboard</h1>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+      {activeTab === 'Upload Content' && (
+        <div className="max-w-xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 animate-fadeIn">
           <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Add New Content</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -71,19 +71,21 @@ const TrainerScreen: React.FC = () => {
               <label htmlFor="tags" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Tags (comma-separated)</label>
               <input type="text" name="tags" id="tags" value={newContent.tags} onChange={handleInputChange} className="mt-1 w-full input-style" />
             </div>
-            <button type="submit" disabled={isSubmitting} className="w-full px-4 py-2.5 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button type="submit" disabled={isSubmitting} className="w-full px-4 py-2.5 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
               {isSubmitting ? 'Adding...' : 'Add Content'}
             </button>
           </form>
         </div>
+      )}
 
-        <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+      {activeTab === 'Content Library' && (
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 animate-fadeIn">
           <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">My Content Library ({myContent.length})</h2>
           <div className="space-y-4 max-h-[32rem] overflow-y-auto pr-2">
             {myContent.length > 0 ? myContent.map(c => (
-              <div key={c.id} className="p-4 border dark:border-gray-700 rounded-lg flex justify-between items-start bg-gray-50 dark:bg-gray-900/50">
+              <div key={c.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg flex justify-between items-start bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100/50 dark:hover:bg-gray-900 transition-colors">
                 <div>
-                  <h3 className="font-bold text-gray-800 dark:text-white">{c.title} <span className="text-xs font-normal bg-gray-200 dark:bg-gray-600 px-2 py-0.5 rounded-full">{c.type}</span></h3>
+                  <h3 className="font-bold text-gray-800 dark:text-white">{c.title} <span className="text-xs font-normal bg-gray-200 dark:bg-gray-600 px-2 py-0.5 rounded-full ml-2">{c.type}</span></h3>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {c.tags.map(tag => <span key={tag} className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full font-medium">{tag}</span>)}
                   </div>
@@ -93,7 +95,7 @@ const TrainerScreen: React.FC = () => {
             )) : <p className="text-gray-500 dark:text-gray-400 text-center py-8">You haven't created any content yet.</p>}
           </div>
         </div>
-      </div>
+      )}
       <style>{`.input-style { background-color: #f3f4f6; color: #1f293b; border-radius: 0.5rem; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; } .dark .input-style { background-color: #374155; color: #f1f5f9; border-color: #475569; } .input-style:focus { outline: 2px solid transparent; outline-offset: 2px; border-color: #60a5fa; ring: 1; ring-color: #60a5fa }`}</style>
     </div>
   );

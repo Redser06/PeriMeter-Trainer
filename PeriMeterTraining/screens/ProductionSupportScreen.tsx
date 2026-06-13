@@ -32,7 +32,7 @@ const StatusIndicator: React.FC<{ status: 'Operational' | 'Degraded' | 'Outage' 
     );
 };
 
-const ProductionSupportScreen: React.FC = () => {
+const ProductionSupportScreen: React.FC<{ activeTab?: string }> = ({ activeTab }) => {
   const { content, users } = useContext(AppContext);
 
   return (
@@ -54,36 +54,69 @@ const ProductionSupportScreen: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">System Event Log</h2>
-          <div className="overflow-auto h-96">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Time</th>
-                  <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Level</th>
-                  <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Service</th>
-                  <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Message</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {MOCK_DETAILED_LOGS.map(log => (
-                  <tr key={log.id} className="font-mono">
-                    <td className="py-2 px-3 text-gray-500">{log.timestamp}</td>
-                    <td className="py-2 px-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${log.level === 'ERROR' ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' : log.level === 'WARN' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300'}`}>{log.level}</span>
-                    </td>
-                    <td className="py-2 px-3 text-gray-600 dark:text-gray-300">{log.service}</td>
-                    <td className="py-2 px-3 text-gray-600 dark:text-gray-300">{log.message}</td>
+      {activeTab === 'System Logs' && (
+        <div className="space-y-8 animate-fadeIn">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">System Event Log</h2>
+            <div className="overflow-auto h-96">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Time</th>
+                    <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Level</th>
+                    <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Service</th>
+                    <th className="py-2 px-3 font-semibold text-gray-500 uppercase">Message</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {MOCK_DETAILED_LOGS.map(log => (
+                    <tr key={log.id} className="font-mono">
+                      <td className="py-2 px-3 text-gray-500">{log.timestamp}</td>
+                      <td className="py-2 px-3">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${log.level === 'ERROR' ? 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300' : log.level === 'WARN' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300'}`}>{log.level}</span>
+                      </td>
+                      <td className="py-2 px-3 text-gray-600 dark:text-gray-300">{log.service}</td>
+                      <td className="py-2 px-3 text-gray-600 dark:text-gray-300">{log.message}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Recent Content Uploads</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-700">
+                    <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Title</th>
+                    <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Type</th>
+                    <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Uploaded By</th>
+                    <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...content].reverse().slice(0, 5).map(c => {
+                    const creator = users.find(u => u.id === c.creatorId);
+                    return (
+                      <tr key={c.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td className="py-3 px-4 font-semibold text-gray-700 dark:text-gray-200">{c.title}</td>
+                        <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{c.type}</td>
+                        <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{creator?.name || 'Unknown'}</td>
+                        <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{c.createdAt}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+      )}
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+      {activeTab === 'API Monitor' && (
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 animate-fadeIn">
           <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Recent API Calls</h2>
           <div className="overflow-auto h-96">
             <table className="w-full text-left text-sm">
@@ -110,36 +143,7 @@ const ProductionSupportScreen: React.FC = () => {
             </table>
           </div>
         </div>
-      </div>
-
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Recent Content Uploads</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Title</th>
-                <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Type</th>
-                <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Uploaded By</th>
-                <th className="py-3 px-4 font-semibold text-sm text-gray-600 dark:text-gray-300 uppercase">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...content].reverse().slice(0, 5).map(c => {
-                const creator = users.find(u => u.id === c.creatorId);
-                return (
-                  <tr key={c.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                    <td className="py-3 px-4 font-semibold text-gray-700 dark:text-gray-200">{c.title}</td>
-                    <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{c.type}</td>
-                    <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{creator?.name || 'Unknown'}</td>
-                    <td className="py-3 px-4 text-gray-600 dark:text-gray-300">{c.createdAt}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

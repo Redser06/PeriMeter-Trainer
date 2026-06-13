@@ -11,8 +11,11 @@ interface NavLink {
 }
 
 const ALL_LINKS: NavLink[] = [
-  { label: 'My Learning', icon: ICONS.learn, persona: Persona.Trainee },
-  { label: 'Search', icon: ICONS.search, persona: Persona.Trainee },
+  { label: 'Dashboard', icon: ICONS.dashboard, persona: Persona.Trainee },
+  { label: 'Ways of Working', icon: ICONS.learn, persona: Persona.Trainee },
+  { label: 'Acronym Soup', icon: ICONS.search, persona: Persona.Trainee },
+  { label: 'Who\'s Who', icon: ICONS.users, persona: Persona.Trainee },
+  { label: 'Training Catalog', icon: ICONS.objectives, persona: Persona.Trainee },
   { label: 'Dashboard', icon: ICONS.dashboard, persona: Persona.HiringManager },
   { label: 'Manage Trainees', icon: ICONS.users, persona: Persona.HiringManager },
   { label: 'Objectives', icon: ICONS.objectives, persona: Persona.HiringManager },
@@ -26,7 +29,12 @@ const ALL_LINKS: NavLink[] = [
   { label: 'API Monitor', icon: ICONS.reports, persona: Persona.ProductionSupport },
 ];
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const { currentPersona } = useContext(AppContext);
 
   const filteredLinks = ALL_LINKS.filter(link => link.persona === currentPersona);
@@ -40,24 +48,25 @@ const Sidebar: React.FC = () => {
       </div>
       <div className="flex-1 overflow-y-auto">
         <nav className="flex-1 px-2 py-4">
-          {filteredLinks.map((link, index) => (
-            <a
+          {filteredLinks.map((link) => (
+            <button
               key={link.label}
-              href="#"
-              className={`flex items-center px-4 py-2.5 mt-2 rounded-lg transition-colors duration-200 ${
-                index === 0 
+              onClick={() => setActiveTab(link.label)}
+              className={`w-full flex items-center px-4 py-2.5 mt-2 rounded-lg transition-colors duration-200 text-left ${
+                activeTab === link.label 
                 ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300' 
                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
               {link.icon}
               <span className="ml-3 font-medium">{link.label}</span>
-            </a>
+            </button>
           ))}
         </nav>
       </div>
     </div>
   );
 };
+
 
 export default Sidebar;

@@ -90,7 +90,7 @@ ${content}
 
   try {
     const response = await withRetry(apiCall);
-    const jsonText = response.text.trim();
+    const jsonText = (response.text || '').trim();
     return JSON.parse(jsonText);
   } catch (error) {
     console.error("Error generating quiz:", error);
@@ -109,7 +109,7 @@ export const searchWeb = async (query: string): Promise<{ text: string; citation
 
   try {
     const response = await withRetry(apiCall);
-    const text = response.text;
+    const text = response.text || '';
     const citations = response.candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
     return { text, citations: citations as GroundingChunk[] };
   } catch (error) {
@@ -138,7 +138,7 @@ User Question: "${query}"`;
 
   try {
     const response = await withRetry(apiCall);
-    return response.text;
+    return response.text || 'I couldn\'t find an answer in the internal documents.';
   } catch (error) {
     console.error("Error searching internal docs:", error);
     return "Sorry, an error occurred while searching the internal documents.";
